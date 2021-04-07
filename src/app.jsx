@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "./components/button";
+import ProgressBar from "./components/progress-bar";
 import TimeInput from "./components/time-input";
 import Timer from "./components/timer";
 
@@ -30,40 +31,43 @@ function App() {
   }, [focused]);
 
   return (
-    <div>
-      {focused ? (
-        <TimeInput
-          value={selectedSeconds}
-          onChange={(e) => setSelectedSeconds(e.target.value)}
-          onBlur={() => setFocused(false)}
-        />
-      ) : (
-        <Timer
-          value={secondsLeft}
-          onClick={() => {
-            setFocused(true);
-          }}
-        />
-      )}
-      <div>
-        <Button
-          variant="primary"
-          disabled={secondsLeft === 0}
-          onClick={() => {
-            setPaused(!paused);
-          }}
-        >
-          {paused ? "Start" : "Pause"}
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setPaused(true);
-            setSecondsLeft(selectedSeconds);
-          }}
-        >
-          Reset
-        </Button>
+    <div className="container">
+      <div className="app">
+        {focused ? (
+          <TimeInput
+            value={selectedSeconds}
+            onChange={setSelectedSeconds}
+            onBlur={() => setFocused(false)}
+          />
+        ) : (
+          <Timer
+            value={secondsLeft}
+            onClick={() => {
+              setFocused(true);
+            }}
+          />
+        )}
+        <ProgressBar value={secondsLeft / selectedSeconds} />
+        <footer className="control-footer">
+          <Button
+            variant="primary"
+            disabled={secondsLeft === 0}
+            onClick={() => {
+              setPaused(!paused);
+            }}
+          >
+            {paused ? "Start" : "Pause"}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setPaused(true);
+              setSecondsLeft(selectedSeconds);
+            }}
+          >
+            Reset
+          </Button>
+        </footer>
       </div>
     </div>
   );
